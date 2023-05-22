@@ -1,11 +1,12 @@
 import customtkinter
 from tkinter import messagebox
+import csv
 
 all_tasks=[]
 work="True"
 
 class Task():
-    def __init__(self,taskName,urgency = "Normal", isDone:bool = False):
+    def __init__(self,taskName, isDone:bool = False, urgency = "Normal"):
         self.name = taskName
         self.isDone = isDone
         self.urgency = urgency
@@ -24,13 +25,29 @@ class Task():
             str= str+(" : Urgent!!!")
         if(self.urgency == "Normal"):
             str= str+(" : Normal")
-        return str
+        return str  
+    
+def TasksToCSV():
+    global all_tasks
+    tfile = open("Tasks.csv","w")
+    tfile.writelines("Task,IsDone,Urgency\n")
+    for t in all_tasks:
+        tfile.writelines(f"{t.name},{t.isDone},{t.urgency}\n")
+    tfile.close
+
+def CSVToTasks():
+    global all_tasks
+    with open("Tasks.csv","r") as f:
+        treader = csv.reader(f)
+        header = next(treader)
+        for row in treader:
+            all_tasks.append(Task(row[0],row[1],row[2]))
 
 def showTask(task):
     global app
     taskName = customtkinter.CTkTextbox(master=app.app_frame,height=20)
     taskName.grid(row=app.app_frame.row+1,column=0,sticky="ew")
-    taskName.insert("0.0",task.name)
+    taskName.insert("0.0",task.name+"\tUrgency:"+task.urgency)
     taskName.configure(state="disabled")
     compBtn = customtkinter.CTkButton(master=app.app_frame,text="Complete Task", command=lambda: removeTask(app.app_frame,task.name))
     compBtn.grid(row=app.app_frame.row+1,column=1,sticky="ew")
@@ -38,6 +55,10 @@ def showTask(task):
 
 def saveTask(name,isDone,urgency):
     global all_tasks
+    for task in all_tasks:
+        if(task.name==name):
+            messagebox.showinfo("Error","Task already exists!")
+            return
     all_tasks.append(Task(name,isDone,urgency))
     print(f"Task {name} saved")
     showTask(all_tasks[-1])
@@ -59,6 +80,7 @@ def addAndRemove(name,urgency,isDone):
 class AppFrame(customtkinter.CTkScrollableFrame):
     def __init__(self, master, **kwargs):
         if(work!="False"):
+
             super().__init__(master, **kwargs)
 
             # add widgets onto the frame...
@@ -78,8 +100,9 @@ class AppFrame(customtkinter.CTkScrollableFrame):
             self.row=self.row+1
             self.combobox = customtkinter.CTkComboBox(master=self, values=["Normal", "Urgent"])
             self.combobox.grid(row=2, column=0, padx=10, pady=10, sticky="ew")
-            self.button = customtkinter.CTkButton(master=self, text="Add Task", command=lambda: saveTask(f"{self.textbox.get('0.0','end').strip()}",f"{self.combobox.get()}",False))
+            self.button = customtkinter.CTkButton(master=self, text="Add Task", command=lambda: saveTask(f"{self.textbox.get('0.0','end').strip()}",False,f"{self.combobox.get()}"))
             self.button.grid(row=2, column=1, padx=10, pady=10, sticky="ew")
+            printAllTasks()
 
 def printAllTasks():
     global all_tasks
@@ -100,6 +123,7 @@ def refresh():
 
 
 def quit():
+    TasksToCSV()
     global work
     work = "False"
     global app
@@ -125,5 +149,10 @@ if __name__ == "__main__":
     global app
     app = App()
     app.wm_protocol("WM_DELETE_WINDOW", lambda:on_closing(app))
+    try:
+        CSVToTasks()
+        printAllTasks()
+    except:
+        print("File not found")
     while(work=="True"):
         app.mainloop()
