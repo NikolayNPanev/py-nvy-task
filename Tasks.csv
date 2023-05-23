@@ -1,1 +1,7 @@
-Task,IsDone,Urgency
+Task,IsDone,Urgency,Deadline
+kolyo,False,Urgent,1/1/2024
+as,False,Normal,24/5/2023
+asa,False,Normal,24/6/2023
+s,False,Normal,22/5/2023
+longtimeurgent,False,Urgent,1/1/2055
+today,False,Urgent,23/5/2023
