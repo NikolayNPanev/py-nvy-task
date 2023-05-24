@@ -5,3 +5,5 @@ asa,False,Normal,24/6/2023
 s,False,Normal,22/5/2023
 longtimeurgent,False,Urgent,1/1/2055
 today,False,Urgent,23/5/2023
+cool task,False,Normal,1/1/2024
+uncool task,False,Normal,1/1/2023
