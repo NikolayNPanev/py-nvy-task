@@ -53,6 +53,7 @@ def CSVToTasks():
         header = next(treader)
         for row in treader:
             all_tasks.append(Task(row[0],row[1],row[2],row[3]))
+    f.close()
 
 def showTask(task):
     global app
@@ -114,11 +115,6 @@ def removeTask(app,name):
             print(f"Task {name} removed")
             refresh()
         ct=ct+1
-    
-
-def addAndRemove(name,urgency,isDone):
-    saveTask(name,urgency,isDone)
-    removeTask(name)
 
 class AppFrame(customtkinter.CTkScrollableFrame):
     def __init__(self, master, **kwargs):
@@ -182,10 +178,6 @@ def refresh():
         if int(task.grid_info()["row"])>4:
             task.grid_forget()
     printAllTasks()
-    #app.app_frame = ""
-    #app.app_frame=AppFrame(app.app_frame.master)
-    #app.destroy()
-    #app = App()
 
 
 def quit():
