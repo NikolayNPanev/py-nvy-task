@@ -177,9 +177,9 @@ def printAllTasks():
 
 def refresh():
     global app
-    app.app_frame.row=3
+    app.app_frame.row=4
     for task in app.app_frame.grid_slaves():
-        if int(task.grid_info()["row"])>3:
+        if int(task.grid_info()["row"])>4:
             task.grid_forget()
     printAllTasks()
     #app.app_frame = ""
