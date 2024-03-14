@@ -82,11 +82,11 @@ def showTask(task):
                 late="Upcoming"
 
     if(late=="True"):    
-        deadline = customtkinter.CTkTextbox(master=app.app_frame,height=20,text_color="red")
+        deadline = customtkinter.CTkTextbox(master=app.app_frame,height=20,text_color="darkred")
     elif(late=="Upcoming"):
-        deadline = customtkinter.CTkTextbox(master=app.app_frame,height=20,text_color="yellow")
+        deadline = customtkinter.CTkTextbox(master=app.app_frame,height=20,text_color="red")
     elif(task.urgency=="Urgent"):
-        deadline = customtkinter.CTkTextbox(master=app.app_frame,height=20,text_color="yellow")
+        deadline = customtkinter.CTkTextbox(master=app.app_frame,height=20,text_color="orange")
     else:
         deadline = customtkinter.CTkTextbox(master=app.app_frame,height=20)
     deadline.grid(row=app.app_frame.row+1,column=2,sticky="ew")
